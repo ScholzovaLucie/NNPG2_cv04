@@ -1,0 +1,10 @@
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\bin\Debug\NNPG2-04.exe.config
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\bin\Debug\NNPG2-04.exe
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\bin\Debug\NNPG2-04.pdb
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2-04.csproj.AssemblyReference.cache
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2_04.Form1.resources
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2_04.Properties.Resources.resources
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2-04.csproj.GenerateResource.cache
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2-04.csproj.CoreCompileInputs.cache
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2-04.exe
+C:\Users\lucka\OneDrive - Univerzita Pardubice\UPCE\ING 1.rocnik 2.semestr\grafika\cviceni\NNPG2-04\NNPG2-04\obj\Debug\NNPG2-04.pdb
