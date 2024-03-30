@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NNPG2_04.Tvary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,15 +17,12 @@ namespace NNPG2_04
 {
     public partial class Form1 : Form
     {
-        private List<Pravouhelnik> listPravouhelniku = new List<Pravouhelnik>();
-        private List<Usecka> listUsecek = new List<Usecka>();
-        private List<Elipsa> listElips = new List<Elipsa>();
+        private List<Tvar> listTvaru = new List<Tvar>();
 
         private Color vybranaBarvaOkraj = Color.Black;
         private HatchStyle vybraneSrafovani = HatchStyle.Horizontal;
         private HatchStyle vybranyOkraj;
         private Color vybranaBarvaPozadi = Color.Blue;
-        private string vybranyStylNaplne = "Barva";
         private bool kresliLine = false;
         private bool kresliPravouhelnik = false;
         private bool kresliOval = false;
@@ -42,10 +40,10 @@ namespace NNPG2_04
 
         public Form1()
         {
-            
             InitializeComponent();
             comboBoxSrafovani_Init();
             okrajStyl_Init();
+
             this.DoubleBuffered = true;
 
             this.PanelKresba.MouseDown += Form1_MouseDown;
@@ -102,18 +100,10 @@ namespace NNPG2_04
                         new Point(endPoint.X, endPoint.Y)
                     };
 
-                Color? okraj = vybranaBarvaOkraj;
-
-                if (!PouzitOkraj.Checked) okraj = vybranaBarvaOkraj;
-
-
-                TvarData data = new TvarData(okraj, null, null, tloustkaOkraje);
-
-                Usecka usecka = new Usecka(
-                    pair,
-                    data
-                    );
-                listUsecek.Add(usecka);
+                Usecka usecka = new Usecka(pair);
+                usecka.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
+                usecka.nastavZIndex(listTvaru.Count);
+                listTvaru.Add(usecka);
             }
             else if (drawingElipse)
             {
@@ -122,29 +112,24 @@ namespace NNPG2_04
 
                 int width = endPoint.X - startPoint.X;
                 int height = endPoint.Y - startPoint.Y;
-                TvarData data = new TvarData();
-
-                Color? okraj = vybranaBarvaOkraj;
-
-                //if (!PouzitOkraj.Checked) okraj = null;
-
-                if (jednolitaBarve.Checked)
-                    data = new TvarData(okraj, vybranaBarvaPozadi, null, tloustkaOkraje);
-
-                else if (srafovani.Checked)
-                    data = new TvarData(okraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
-
-                else
-                    data = new TvarData(okraj, null, null, tloustkaOkraje);
 
                 Elipsa elipsa = new Elipsa(
                     startPoint,
                     width,
-                    height,
-                    data
-                    );
+                    height
+                 );
 
-                listElips.Add(elipsa);
+                if (jednolitaBarve.Checked)
+                    elipsa.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, null, tloustkaOkraje);
+
+                else if (srafovani.Checked)
+                    elipsa.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
+
+                else
+                    elipsa.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
+
+                elipsa.nastavZIndex(listTvaru.Count);
+                listTvaru.Add(elipsa);
             }
             else if (drawingRectangle)
             {
@@ -154,26 +139,22 @@ namespace NNPG2_04
                 int width = endPoint.X - startPoint.X;
                 int height = endPoint.Y - startPoint.Y;
 
-                TvarData data = new TvarData();
-
-                Color? okraj = vybranaBarvaOkraj;
-
-                // if (!PouzitOkraj.Checked) okraj = null;
-
-                if (jednolitaBarve.Checked)
-                    data = new TvarData(okraj, vybranaBarvaPozadi, null, tloustkaOkraje);
-
-                else if (srafovani.Checked)
-                    data = new TvarData(okraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
-
-                else
-                    data = new TvarData(okraj, null, null, tloustkaOkraje);
 
                 Pravouhelnik pravouhelnik = new Pravouhelnik(
-                    new Rectangle(startPoint.X, startPoint.Y, width, height),
-                    data
+                    new Rectangle(startPoint.X, startPoint.Y, width, height)
                     );
-                listPravouhelniku.Add(pravouhelnik);
+
+                if (jednolitaBarve.Checked)
+                    pravouhelnik.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, null, tloustkaOkraje);
+
+                else if (srafovani.Checked)
+                    pravouhelnik.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
+
+                else
+                    pravouhelnik.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
+
+                pravouhelnik.nastavZIndex(listTvaru.Count);
+                listTvaru.Add(pravouhelnik);
             }
 
             drawingRectangle = false;
@@ -187,226 +168,48 @@ namespace NNPG2_04
 
             g.Clear(Color.White);
 
-            foreach (var pravouhelnik in listPravouhelniku)
+            foreach (var tvar in listTvaru)
             {
-                if (pravouhelnik.data.vypln != null)
-                {
-                    SolidBrush blueBrush = new SolidBrush((Color)pravouhelnik.data.vypln);
-                    g.FillRectangle(blueBrush, pravouhelnik.rectangle);
-                    if (pravouhelnik.data.okraj != null)
-                    {
-                        Pen pen = new Pen((Color)pravouhelnik.data.okraj, pravouhelnik.data.tloustkaOkraje);
-                        g.DrawRectangle(pen, pravouhelnik.rectangle);
-                    }
-                }
-
-                if (pravouhelnik.data.vybraneSrafovani != null)
-                {
-                    HatchBrush blueBrush = new HatchBrush(
-                        (HatchStyle)pravouhelnik.data.vybraneSrafovani,
-                        (Color)pravouhelnik.data.vypln,
-                        Color.White
-                        );
-                    g.FillRectangle(blueBrush, pravouhelnik.rectangle);
-                    if (pravouhelnik.data.okraj != null)
-                    {
-                        Pen pen = new Pen((Color)pravouhelnik.data.okraj, pravouhelnik.data.tloustkaOkraje);
-                        g.DrawRectangle(pen, pravouhelnik.rectangle);
-                    }
-                }
-
-                else
-                {
-                    Pen pen = new Pen((Color)pravouhelnik.data.okraj, pravouhelnik.data.tloustkaOkraje);
-                    g.DrawRectangle(pen, pravouhelnik.rectangle);
-                }
-            }
-
-            foreach (var elipsa in listElips)
-            {
-                if (elipsa.data.vypln != null)
-                {
-                    SolidBrush blueBrush = new SolidBrush((Color)elipsa.data.vypln);
-                    g.FillEllipse(
-                             blueBrush,
-                             elipsa.startPoint.X,
-                             elipsa.startPoint.Y,
-                             elipsa.width,
-                             elipsa.height
-                         );
-                    if (elipsa.data.okraj != null)
-                    {
-                        Pen pen = new Pen((Color)elipsa.data.okraj, elipsa.data.tloustkaOkraje);
-                        g.DrawEllipse(
-                            pen,
-                            elipsa.startPoint.X,
-                            elipsa.startPoint.Y,
-                            elipsa.width,
-                            elipsa.height
-                         );
-                    }
-                }
-                if (elipsa.data.vybraneSrafovani != null)
-                {
-                    HatchBrush blueBrush = new HatchBrush(
-                        (HatchStyle)elipsa.data.vybraneSrafovani,
-                        (Color)elipsa.data.vypln,
-                        Color.White
-                        );
-                    g.FillEllipse(
-                            blueBrush,
-                            elipsa.startPoint.X,
-                            elipsa.startPoint.Y,
-                            elipsa.width,
-                            elipsa.height
-                        );
-                    if (elipsa.data.okraj != null)
-                    {
-                        Pen pen = new Pen((Color)elipsa.data.okraj, elipsa.data.tloustkaOkraje);
-                        g.DrawEllipse(
-                            pen,
-                            elipsa.startPoint.X,
-                            elipsa.startPoint.Y,
-                            elipsa.width,
-                            elipsa.height
-                         );
-                    }
-                }
-
-                else
-                {
-                    Pen pen = new Pen((Color)elipsa.data.okraj, elipsa.data.tloustkaOkraje);
-                    g.DrawEllipse(
-                       pen,
-                       elipsa.startPoint.X,
-                       elipsa.startPoint.Y,
-                       elipsa.width,
-                       elipsa.height
-                   );
-                }
-
-            }
-
-            foreach (var usecka in listUsecek)
-            {
-                Pen pen = new Pen((Color)usecka.data.okraj, usecka.data.tloustkaOkraje);
-                g.DrawLine(pen, usecka.points[0], usecka.points[1]);
-            }
-
-            if (drawingLine)
-            {
-                Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                g.DrawLine(pen, startPoint, endPoint);
-            }
+                tvar.Draw(g, tvar.vypln != null, tvar.vybraneSrafovani != null, tvar.okraj != null);
+            }         
 
             if (drawingRectangle)
             {
                 int width = endPoint.X - startPoint.X;
                 int height = endPoint.Y - startPoint.Y;
 
-                if (jednolitaBarve.Checked)
-                {
-                    SolidBrush blueBrush = new SolidBrush((Color)vybranaBarvaPozadi);
-                    Rectangle rect2 = new Rectangle(startPoint.X, startPoint.Y, width, height);
-                    g.FillRectangle(blueBrush, rect2);
-                   // if (PouzitOkraj.Checked)
-                    //{
-                        Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                        Rectangle rect = new Rectangle(startPoint.X, startPoint.Y, width, height);
-                        g.DrawRectangle(pen, rect);
-                    //}
-                }
-
-                if (srafovani.Checked)
-                {
-                    HatchBrush blueBrush = new HatchBrush(
-                        (HatchStyle)vybraneSrafovani,
-                        (Color)vybranaBarvaPozadi,
-                        Color.White
-                        );
-                    Rectangle rect2 = new Rectangle(startPoint.X, startPoint.Y, width, height);
-                    g.FillRectangle(blueBrush, rect2);
-                   // if (PouzitOkraj.Checked)
-                    //{
-                        Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                        Rectangle rect = new Rectangle(startPoint.X, startPoint.Y, width, height);
-                        g.DrawRectangle(pen, rect);
-                    //}
-                }
-
-                else
-                {
-                    Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                    Rectangle rect2 = new Rectangle(startPoint.X, startPoint.Y, width, height);
-                    g.DrawRectangle(pen, rect2);
-                }
-
+                Rectangle rect2 = new Rectangle(startPoint.X, startPoint.Y, width, height);
+                Pravouhelnik pravouhelnik = new Pravouhelnik(rect2);
+                pravouhelnik.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
+                pravouhelnik.nastavZIndex(listTvaru.Count);
+                pravouhelnik.Draw(g, jednolitaBarve.Checked, srafovani.Checked, PouzitOkraj.Checked);
             }
 
             if (drawingElipse)
             {
                 int width = endPoint.X - startPoint.X;
                 int height = endPoint.Y - startPoint.Y;
-                if (jednolitaBarve.Checked)
-                {
-                    SolidBrush blueBrush = new SolidBrush((Color)vybranaBarvaOkraj);
-                    g.FillEllipse(
-                             blueBrush,
-                             startPoint.X,
-                             startPoint.Y,
-                             width,
-                             height
-                         );
-                   // if (PouzitOkraj.Checked)
-                   // {
-                        Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                        g.DrawEllipse(
-                            pen,
-                            startPoint.X,
-                            startPoint.Y,
-                            width,
-                            height
-                         );
-                    //}
-                }
-                if (srafovani.Checked)
-                {
-                    HatchBrush blueBrush = new HatchBrush(
-                        (HatchStyle)vybraneSrafovani,
-                        (Color)vybranaBarvaPozadi,
-                        Color.White
-                        );
-                    g.FillEllipse(
-                            blueBrush,
-                            startPoint.X,
-                            startPoint.Y,
-                            width,
-                            height
-                        );
-                    //if (PouzitOkraj.Checked)
-                    //{
-                        Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                        g.DrawEllipse(
-                            pen,
-                            startPoint.X,
-                            startPoint.Y,
-                            width,
-                            height
-                         );
-                    //}
-                }
+                Elipsa elipsa = new Elipsa(
+                     startPoint,
+                     width,
+                     height
+                  );
+                elipsa.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
+                elipsa.nastavZIndex(listTvaru.Count);
+                elipsa.Draw(g, jednolitaBarve.Checked, srafovani.Checked, PouzitOkraj.Checked);
+            }
 
-                else
-                {
-                    Pen pen = new Pen(vybranaBarvaOkraj, tloustkaOkraje);
-                    g.DrawEllipse(
-                       pen,
-                       startPoint.X,
-                       startPoint.Y,
-                       width,
-                       height
-                   );
-                }
+            if (drawingLine)
+            {
+                Point[] pair =
+                    {
+                        new Point(startPoint.X, startPoint.Y),
+                        new Point(endPoint.X, endPoint.Y)
+                    };
+                Usecka usecka = new Usecka(pair);
+                usecka.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
+                usecka.nastavZIndex(listTvaru.Count);
+                usecka.Draw(g, jednolitaBarve.Checked, srafovani.Checked, PouzitOkraj.Checked);
             }
         }
 
@@ -435,7 +238,7 @@ namespace NNPG2_04
         private void krasliElipsu_Click(object sender, EventArgs e)
         {
             this.kresliLine = false;
-            this.kresliOval = false;
+            this.kresliOval = true;
             this.kresliPravouhelnik = false;
 
             kresliPravouhelnikButton.Checked = false;
