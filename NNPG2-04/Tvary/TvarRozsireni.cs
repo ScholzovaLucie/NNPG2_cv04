@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +57,41 @@ namespace NNPG2_04.Tvary
             Tvar temp = array[i];
             array[i] = array[j];
             array[j] = temp;
+        }
+
+        public double DistancePointToLine(Point point, Point lineStart, Point lineEnd)
+        {
+            double A = point.X - lineStart.X;
+            double B = point.Y - lineStart.Y;
+            double C = lineEnd.X - lineStart.X;
+            double D = lineEnd.Y - lineStart.Y;
+
+            double dot = A * C + B * D;
+            double len_sq = C * C + D * D;
+            double param = dot / len_sq;
+
+            double xx, yy;
+
+            if (param < 0)
+            {
+                xx = lineStart.X;
+                yy = lineStart.Y;
+            }
+            else if (param > 1)
+            {
+                xx = lineEnd.X;
+                yy = lineEnd.Y;
+            }
+            else
+            {
+                xx = lineStart.X + param * C;
+                yy = lineStart.Y + param * D;
+            }
+
+            double dx = point.X - xx;
+            double dy = point.Y - yy;
+
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }

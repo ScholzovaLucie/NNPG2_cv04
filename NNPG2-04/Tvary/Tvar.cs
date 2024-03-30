@@ -23,7 +23,8 @@ namespace NNPG2_04.Tvary
 
         public abstract void Draw(Graphics g, bool vypln, bool srafovani, bool okraj);
         public abstract void UpdatePosition(int x, int y);
-        public abstract bool Contains(int x, int y);
+        public abstract bool ContainsPoint(Point point);
+             public abstract double vzdalenostOdBodu(Point point);
 
         public abstract LinkedList<Tvar> doPopredi(LinkedList<Tvar> list);
         public abstract LinkedList<Tvar> doPozadi(LinkedList<Tvar> list);

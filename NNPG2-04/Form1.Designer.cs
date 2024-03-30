@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.colorDialogOkraj = new System.Windows.Forms.ColorDialog();
             this.colorDialogPozadi = new System.Windows.Forms.ColorDialog();
@@ -41,30 +42,31 @@
             this.smazatButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.PanelKresba = new System.Windows.Forms.Panel();
+            this.comboBoxPosun = new System.Windows.Forms.ComboBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.vyplnBox = new System.Windows.Forms.GroupBox();
             this.pictureBoxBarvaPozadi = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBarvaOkraj = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBoxSrafovaniSUkazkou = new System.Windows.Forms.ComboBox();
-            this.srafovani = new System.Windows.Forms.CheckBox();
-            this.jednolitaBarve = new System.Windows.Forms.CheckBox();
             this.BezVyplne = new System.Windows.Forms.CheckBox();
-            this.tloustkaOkrajeSetting = new System.Windows.Forms.NumericUpDown();
-            this.okrajStyl = new System.Windows.Forms.ComboBox();
+            this.comboBoxSrafovaniSUkazkou = new System.Windows.Forms.ComboBox();
+            this.jednolitaBarve = new System.Windows.Forms.CheckBox();
+            this.srafovani = new System.Windows.Forms.CheckBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.okrajBox = new System.Windows.Forms.GroupBox();
+            this.pictureBoxBarvaOkraj = new System.Windows.Forms.PictureBox();
             this.PouzitOkraj = new System.Windows.Forms.CheckBox();
+            this.okrajStyl = new System.Windows.Forms.ComboBox();
+            this.tloustkaOkrajeSetting = new System.Windows.Forms.NumericUpDown();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.colorDialog2 = new System.Windows.Forms.ColorDialog();
-            this.okrajBox = new System.Windows.Forms.GroupBox();
-            this.vyplnBox = new System.Windows.Forms.GroupBox();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             this.PanelKresba.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.vyplnBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBarvaPozadi)).BeginInit();
+            this.okrajBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBarvaOkraj)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tloustkaOkrajeSetting)).BeginInit();
-            this.okrajBox.SuspendLayout();
-            this.vyplnBox.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -151,12 +153,47 @@
             // 
             // PanelKresba
             // 
+            this.PanelKresba.Controls.Add(this.comboBoxPosun);
             this.PanelKresba.Controls.Add(this.panel2);
             this.PanelKresba.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelKresba.Location = new System.Drawing.Point(0, 25);
             this.PanelKresba.Name = "PanelKresba";
             this.PanelKresba.Size = new System.Drawing.Size(800, 425);
             this.PanelKresba.TabIndex = 1;
+            // 
+            // comboBoxPosun
+            // 
+            this.comboBoxPosun.FormattingEnabled = true;
+            this.comboBoxPosun.Location = new System.Drawing.Point(493, 123);
+            this.comboBoxPosun.Name = "comboBoxPosun";
+            this.comboBoxPosun.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxPosun.TabIndex = 3;
+            this.comboBoxPosun.Visible = false;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.vyplnBox);
+            this.panel2.Controls.Add(this.splitter1);
+            this.panel2.Controls.Add(this.okrajBox);
+            this.panel2.Location = new System.Drawing.Point(0, 286);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(800, 139);
+            this.panel2.TabIndex = 2;
+            // 
+            // vyplnBox
+            // 
+            this.vyplnBox.Controls.Add(this.pictureBoxBarvaPozadi);
+            this.vyplnBox.Controls.Add(this.label3);
+            this.vyplnBox.Controls.Add(this.BezVyplne);
+            this.vyplnBox.Controls.Add(this.comboBoxSrafovaniSUkazkou);
+            this.vyplnBox.Controls.Add(this.jednolitaBarve);
+            this.vyplnBox.Controls.Add(this.srafovani);
+            this.vyplnBox.Location = new System.Drawing.Point(401, 3);
+            this.vyplnBox.Name = "vyplnBox";
+            this.vyplnBox.Size = new System.Drawing.Size(396, 131);
+            this.vyplnBox.TabIndex = 4;
+            this.vyplnBox.TabStop = false;
+            this.vyplnBox.Text = "Výplň";
             // 
             // pictureBoxBarvaPozadi
             // 
@@ -168,56 +205,14 @@
             this.pictureBoxBarvaPozadi.TabStop = false;
             this.pictureBoxBarvaPozadi.Click += new System.EventHandler(this.barvaPozadi_Click);
             // 
-            // pictureBoxBarvaOkraj
-            // 
-            this.pictureBoxBarvaOkraj.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.pictureBoxBarvaOkraj.Location = new System.Drawing.Point(12, 101);
-            this.pictureBoxBarvaOkraj.Name = "pictureBoxBarvaOkraj";
-            this.pictureBoxBarvaOkraj.Size = new System.Drawing.Size(23, 21);
-            this.pictureBoxBarvaOkraj.TabIndex = 3;
-            this.pictureBoxBarvaOkraj.TabStop = false;
-            this.pictureBoxBarvaOkraj.Click += new System.EventHandler(this.barvaOkraj_Click_1);
-            this.pictureBoxBarvaOkraj.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxBarvaOkraj_Paint);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(192, 103);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 10);
+            this.label3.Size = new System.Drawing.Size(60, 13);
             this.label3.TabIndex = 9;
             this.label3.Text = "Styl pozadí";
-            // 
-            // comboBoxSrafovaniSUkazkou
-            // 
-            this.comboBoxSrafovaniSUkazkou.FormattingEnabled = true;
-            this.comboBoxSrafovaniSUkazkou.Location = new System.Drawing.Point(269, 100);
-            this.comboBoxSrafovaniSUkazkou.Name = "comboBoxSrafovaniSUkazkou";
-            this.comboBoxSrafovaniSUkazkou.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxSrafovaniSUkazkou.TabIndex = 8;
-            this.comboBoxSrafovaniSUkazkou.SelectedIndexChanged += new System.EventHandler(this.comboBoxSrafovaniSUkazkou_SelectedIndexChanged);
-            // 
-            // srafovani
-            // 
-            this.srafovani.AutoSize = true;
-            this.srafovani.Location = new System.Drawing.Point(298, 55);
-            this.srafovani.Name = "srafovani";
-            this.srafovani.Size = new System.Drawing.Size(73, 17);
-            this.srafovani.TabIndex = 7;
-            this.srafovani.Text = "Šrafování";
-            this.srafovani.UseVisualStyleBackColor = true;
-            this.srafovani.CheckedChanged += new System.EventHandler(this.srafovani_CheckedChanged);
-            // 
-            // jednolitaBarve
-            // 
-            this.jednolitaBarve.AutoSize = true;
-            this.jednolitaBarve.Location = new System.Drawing.Point(130, 55);
-            this.jednolitaBarve.Name = "jednolitaBarve";
-            this.jednolitaBarve.Size = new System.Drawing.Size(98, 17);
-            this.jednolitaBarve.TabIndex = 6;
-            this.jednolitaBarve.Text = "Jednolitá barva";
-            this.jednolitaBarve.UseVisualStyleBackColor = true;
-            this.jednolitaBarve.CheckedChanged += new System.EventHandler(this.jednolitaBarve_CheckedChanged);
             // 
             // BezVyplne
             // 
@@ -231,6 +226,87 @@
             this.BezVyplne.Text = "Bez výplně";
             this.BezVyplne.UseVisualStyleBackColor = true;
             this.BezVyplne.CheckedChanged += new System.EventHandler(this.BezVyplne_CheckedChanged);
+            // 
+            // comboBoxSrafovaniSUkazkou
+            // 
+            this.comboBoxSrafovaniSUkazkou.FormattingEnabled = true;
+            this.comboBoxSrafovaniSUkazkou.Location = new System.Drawing.Point(269, 100);
+            this.comboBoxSrafovaniSUkazkou.Name = "comboBoxSrafovaniSUkazkou";
+            this.comboBoxSrafovaniSUkazkou.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxSrafovaniSUkazkou.TabIndex = 8;
+            this.comboBoxSrafovaniSUkazkou.SelectedIndexChanged += new System.EventHandler(this.comboBoxSrafovaniSUkazkou_SelectedIndexChanged);
+            // 
+            // jednolitaBarve
+            // 
+            this.jednolitaBarve.AutoSize = true;
+            this.jednolitaBarve.Location = new System.Drawing.Point(130, 55);
+            this.jednolitaBarve.Name = "jednolitaBarve";
+            this.jednolitaBarve.Size = new System.Drawing.Size(98, 17);
+            this.jednolitaBarve.TabIndex = 6;
+            this.jednolitaBarve.Text = "Jednolitá barva";
+            this.jednolitaBarve.UseVisualStyleBackColor = true;
+            this.jednolitaBarve.CheckedChanged += new System.EventHandler(this.jednolitaBarve_CheckedChanged);
+            // 
+            // srafovani
+            // 
+            this.srafovani.AutoSize = true;
+            this.srafovani.Location = new System.Drawing.Point(298, 55);
+            this.srafovani.Name = "srafovani";
+            this.srafovani.Size = new System.Drawing.Size(73, 17);
+            this.srafovani.TabIndex = 7;
+            this.srafovani.Text = "Šrafování";
+            this.srafovani.UseVisualStyleBackColor = true;
+            this.srafovani.CheckedChanged += new System.EventHandler(this.srafovani_CheckedChanged);
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(0, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 139);
+            this.splitter1.TabIndex = 10;
+            this.splitter1.TabStop = false;
+            // 
+            // okrajBox
+            // 
+            this.okrajBox.Controls.Add(this.pictureBoxBarvaOkraj);
+            this.okrajBox.Controls.Add(this.PouzitOkraj);
+            this.okrajBox.Controls.Add(this.okrajStyl);
+            this.okrajBox.Controls.Add(this.tloustkaOkrajeSetting);
+            this.okrajBox.Location = new System.Drawing.Point(3, 3);
+            this.okrajBox.Name = "okrajBox";
+            this.okrajBox.Size = new System.Drawing.Size(392, 131);
+            this.okrajBox.TabIndex = 3;
+            this.okrajBox.TabStop = false;
+            this.okrajBox.Text = "Okraj";
+            // 
+            // pictureBoxBarvaOkraj
+            // 
+            this.pictureBoxBarvaOkraj.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.pictureBoxBarvaOkraj.Location = new System.Drawing.Point(12, 101);
+            this.pictureBoxBarvaOkraj.Name = "pictureBoxBarvaOkraj";
+            this.pictureBoxBarvaOkraj.Size = new System.Drawing.Size(23, 21);
+            this.pictureBoxBarvaOkraj.TabIndex = 3;
+            this.pictureBoxBarvaOkraj.TabStop = false;
+            this.pictureBoxBarvaOkraj.Click += new System.EventHandler(this.barvaOkraj_Click_1);
+            this.pictureBoxBarvaOkraj.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxBarvaOkraj_Paint);
+            // 
+            // PouzitOkraj
+            // 
+            this.PouzitOkraj.AutoSize = true;
+            this.PouzitOkraj.Location = new System.Drawing.Point(12, 32);
+            this.PouzitOkraj.Name = "PouzitOkraj";
+            this.PouzitOkraj.Size = new System.Drawing.Size(57, 17);
+            this.PouzitOkraj.TabIndex = 0;
+            this.PouzitOkraj.Text = "Použít";
+            this.PouzitOkraj.UseVisualStyleBackColor = true;
+            // 
+            // okrajStyl
+            // 
+            this.okrajStyl.FormattingEnabled = true;
+            this.okrajStyl.Location = new System.Drawing.Point(120, 101);
+            this.okrajStyl.Name = "okrajStyl";
+            this.okrajStyl.Size = new System.Drawing.Size(121, 21);
+            this.okrajStyl.TabIndex = 1;
             // 
             // tloustkaOkrajeSetting
             // 
@@ -251,70 +327,6 @@
             0});
             this.tloustkaOkrajeSetting.ValueChanged += new System.EventHandler(this.numericUokrajTloustkapDown1_ValueChanged);
             // 
-            // okrajStyl
-            // 
-            this.okrajStyl.FormattingEnabled = true;
-            this.okrajStyl.Location = new System.Drawing.Point(120, 101);
-            this.okrajStyl.Name = "okrajStyl";
-            this.okrajStyl.Size = new System.Drawing.Size(121, 21);
-            this.okrajStyl.TabIndex = 1;
-            // 
-            // PouzitOkraj
-            // 
-            this.PouzitOkraj.AutoSize = true;
-            this.PouzitOkraj.Location = new System.Drawing.Point(12, 32);
-            this.PouzitOkraj.Name = "PouzitOkraj";
-            this.PouzitOkraj.Size = new System.Drawing.Size(57, 17);
-            this.PouzitOkraj.TabIndex = 0;
-            this.PouzitOkraj.Text = "Použít";
-            this.PouzitOkraj.UseVisualStyleBackColor = true;
-            // 
-            // okrajBox
-            // 
-            this.okrajBox.Controls.Add(this.pictureBoxBarvaOkraj);
-            this.okrajBox.Controls.Add(this.PouzitOkraj);
-            this.okrajBox.Controls.Add(this.okrajStyl);
-            this.okrajBox.Controls.Add(this.tloustkaOkrajeSetting);
-            this.okrajBox.Location = new System.Drawing.Point(3, 3);
-            this.okrajBox.Name = "okrajBox";
-            this.okrajBox.Size = new System.Drawing.Size(392, 131);
-            this.okrajBox.TabIndex = 3;
-            this.okrajBox.TabStop = false;
-            this.okrajBox.Text = "Okraj";
-            // 
-            // vyplnBox
-            // 
-            this.vyplnBox.Controls.Add(this.pictureBoxBarvaPozadi);
-            this.vyplnBox.Controls.Add(this.label3);
-            this.vyplnBox.Controls.Add(this.BezVyplne);
-            this.vyplnBox.Controls.Add(this.comboBoxSrafovaniSUkazkou);
-            this.vyplnBox.Controls.Add(this.jednolitaBarve);
-            this.vyplnBox.Controls.Add(this.srafovani);
-            this.vyplnBox.Location = new System.Drawing.Point(401, 3);
-            this.vyplnBox.Name = "vyplnBox";
-            this.vyplnBox.Size = new System.Drawing.Size(396, 131);
-            this.vyplnBox.TabIndex = 4;
-            this.vyplnBox.TabStop = false;
-            this.vyplnBox.Text = "Výplň";
-            // 
-            // splitter1
-            // 
-            this.splitter1.Location = new System.Drawing.Point(0, 0);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 139);
-            this.splitter1.TabIndex = 10;
-            this.splitter1.TabStop = false;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.vyplnBox);
-            this.panel2.Controls.Add(this.splitter1);
-            this.panel2.Controls.Add(this.okrajBox);
-            this.panel2.Location = new System.Drawing.Point(0, 286);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(800, 139);
-            this.panel2.TabIndex = 2;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,14 +339,14 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.PanelKresba.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBarvaPozadi)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBarvaOkraj)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tloustkaOkrajeSetting)).EndInit();
-            this.okrajBox.ResumeLayout(false);
-            this.okrajBox.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.vyplnBox.ResumeLayout(false);
             this.vyplnBox.PerformLayout();
-            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBarvaPozadi)).EndInit();
+            this.okrajBox.ResumeLayout(false);
+            this.okrajBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBarvaOkraj)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tloustkaOkrajeSetting)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,6 +381,7 @@
         private System.Windows.Forms.GroupBox okrajBox;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.ComboBox comboBoxPosun;
     }
 }
 
