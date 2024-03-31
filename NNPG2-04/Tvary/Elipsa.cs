@@ -14,10 +14,14 @@ namespace NNPG2_04
 {
     internal class Elipsa : Tvar
     {
+        private Rectangle rectangle;
         public Point startPoint;
         public Point center;
         public int width;
         public int height;
+        private Point offset;
+        private bool manipulace = false;
+        private Rectangle RightBottomManipulator;
 
 
         public Elipsa(Point startPoint, Point center, int width, int height)
@@ -43,29 +47,45 @@ namespace NNPG2_04
 
         public override bool ContainsPoint(Point point)
         {
-            
-            double xRadius = width / 2;
-            double yRadius = height / 2;
-            double centerX = center.X + xRadius;
-            double centerY = center.Y + yRadius;
+            if (this.vypln != null || this.vybraneSrafovani != null)
+            {
+                return point.X >= startPoint.X && point.X <= startPoint.X + width && point.Y >= startPoint.Y && point.Y <= startPoint.Y + height;
+            }
+            else
+            {
+                double expandDistance = 20;
+                return point.X >= startPoint.X - expandDistance && point.X <= startPoint.X + width + expandDistance &&
+                       point.Y >= startPoint.Y - expandDistance && point.Y <= startPoint.Y + height + expandDistance;
+            }
 
-            double distance = Math.Pow((point.X - centerX) / xRadius, 2) + Math.Pow((point.Y - centerY) / yRadius, 2);
-
-            return distance <= 1;
-   
         }
         public override double vzdalenostOdBodu(Point point)
         {
+            Point[] startPoints = new Point[]
+           {
+                    new Point(this.startPoint.X, this.startPoint.Y),
+                    new Point(this.startPoint.X + this.width, this.startPoint.Y),
+                    new Point(this.startPoint.X + this.width, this.startPoint.Y + this.height),
+                    new Point(this.startPoint.X, this.startPoint.Y + this.height)
+           };
 
-            double centerX = this.center.X;
-            double centerY = this.center.Y;
-            double xRadius = this.width / 2;
-            double yRadius = this.height / 2;
-            double angle = Math.Atan2(point.Y - centerY, point.X - centerX);
-            double closestX = centerX + xRadius * Math.Cos(angle);
-            double closestY = centerY + yRadius * Math.Sin(angle);
-            return Math.Sqrt(Math.Pow(point.X - closestX, 2) + Math.Pow(point.Y - closestY, 2));
+            Point[] endPoints = new Point[]
+            {
+                    new Point(this.startPoint.X + this.width, this.startPoint.Y),
+                    new Point(this.startPoint.X + this.width, this.startPoint.Y + this.height),
+                    new Point(this.startPoint.X, this.startPoint.Y + this.height),
+                    new Point(this.startPoint.X, this.startPoint.Y)
+            };
 
+            double nejlratsiVzdalenost = new TvarRozsireni().DistancePointToLine(point, startPoints[0], endPoints[0]);
+
+            for (int i = 0; i < 4; i++)
+            {
+                double vzdalenost = new TvarRozsireni().DistancePointToLine(point, startPoints[i], endPoints[i]);
+                if (nejlratsiVzdalenost > vzdalenost) nejlratsiVzdalenost = vzdalenost;
+            }
+
+            return nejlratsiVzdalenost;
         }
 
 
@@ -131,11 +151,46 @@ namespace NNPG2_04
                    this.height
                );
             }
+
+            if(manipulace)
+            {
+                rectangle = new Rectangle(startPoint.X, startPoint.Y, width, height);
+                g.DrawRectangle(Pens.Red, rectangle);
+                int x = rectangle.X + rectangle.Width - 10;
+                int y = rectangle.Y + rectangle.Height - 10;
+                RightBottomManipulator = new Rectangle(x, y, 10, 10);
+                g.FillRectangle(Brushes.Red, RightBottomManipulator);
+            }
         }
 
-        public override void UpdatePosition(int x, int y)
+        public override void UpdatePosition(Point point)
         {
-            throw new NotImplementedException();
+            double newStartX = point.X - offset.X;
+            double newStartY = point.Y - offset.Y;
+
+            startPoint.X = (int)newStartX;
+            startPoint.Y = (int)newStartY;
+            center = new Point(point.X - offset.X, point.Y - offset.Y);
+        }
+
+        public override void setOfset(Point point)
+        {
+            offset = new Point(point.X - startPoint.X, point.Y - startPoint.Y);
+        }
+
+        public override void UpdateSize(Point point)
+        {
+            double newX = Math.Min(startPoint.X, point.X);
+            double newY = Math.Min(startPoint.Y, point.Y);
+
+            double newWidth = Math.Abs(point.X - startPoint.X);
+            double newHeight = Math.Abs(point.Y - startPoint.Y);
+
+            startPoint.X = (int)newX;
+            startPoint.Y = (int)newY;
+            width = (int)newWidth;
+            height = (int)newHeight;
+
         }
 
         public override LinkedList<Tvar> doPopredi(LinkedList<Tvar> list)
@@ -176,5 +231,25 @@ namespace NNPG2_04
                 return hash;
             }
         }
+
+        public override bool ManipulatorContains(Point point)
+        {
+            return point.X >= RightBottomManipulator.X &&
+                    point.X <= RightBottomManipulator.X + RightBottomManipulator.Width &&
+                    point.Y >= RightBottomManipulator.Y &&
+                    point.Y <= RightBottomManipulator.Y + RightBottomManipulator.Height;
+        }
+
+        public override void CreateManipulator()
+        {
+            if (!manipulace)
+                manipulace = true;
+            else if (manipulace)
+            {
+                manipulace = false;
+            }
+
+        }
+
     }
 }

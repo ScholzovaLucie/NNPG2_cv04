@@ -93,5 +93,24 @@ namespace NNPG2_04.Tvary
 
             return Math.Sqrt(dx * dx + dy * dy);
         }
+
+        public Point FindClosestPointOnLine(Point lineStart, Point lineEnd, Point point)
+        {
+            double dx = lineEnd.X - lineStart.X;
+            double dy = lineEnd.Y - lineStart.Y;
+
+            if (dx == 0 && dy == 0)
+                return lineStart;
+
+            double t = ((point.X - lineStart.X) * dx + (point.Y - lineStart.Y) * dy) / (dx * dx + dy * dy);
+
+            t = Math.Max(0, Math.Min(1, t));
+
+            double closestX = lineStart.X + t * dx;
+            double closestY = lineStart.Y + t * dy;
+            return new Point((int)closestX, (int)closestY);
+        }
+
+
     }
 }

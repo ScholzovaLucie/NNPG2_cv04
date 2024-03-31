@@ -24,23 +24,25 @@ namespace NNPG2_04
         private HatchStyle vybraneSrafovani = HatchStyle.Horizontal;
         private HatchStyle vybranyOkraj;
         private Color vybranaBarvaPozadi = Color.Blue;
+        private Point startPoint;
+        private Point endPoint;
+        private Tvar aktualniTvar = null;
+        private Point posledniPozice;
+
         private bool kresliLine = false;
         private bool kresliPravouhelnik = false;
         private bool kresliOval = false;
-
         private bool drawingLine = false;
         private bool drawingRectangle = false;
         private bool drawingElipse = false;
         private bool mazani = false;
-
-        private Point startPoint;
-        private Point endPoint;
+        private bool editace = false;
+        private bool editovani = false;
+        private bool transformovani = false;
+        private bool posun = false;
 
         private int tloustkaOkraje = 0;
-
-        Tvar aktualniTvar = null;
-
-
+        private int tolerance = 20;
 
         public Form1()
         {
@@ -89,12 +91,37 @@ namespace NNPG2_04
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && mazani)
+            if (e.Button == MouseButtons.Left)
             {
-                Tvar closestShape = ClickedOnObject(e.Location);
-                if (closestShape != null)
+                if (mazani)
                 {
-                    listTvaru.Remove(closestShape);
+                    Tvar closestShape = ClickedOnObject(e.Location);
+                    if (closestShape != null)
+                    {
+                        listTvaru.Remove(closestShape);
+                    }
+                }
+                if (editace)
+                {
+                    posledniPozice = e.Location;
+
+                    Tvar clickedOnObject = ClickedOnObject(e.Location);
+                    if (clickedOnObject != null)
+                    {
+                        if (aktualniTvar != null)
+                        {
+                            resetAktualniTvar();
+                        }
+                        else
+                        {
+                            clickedOnObject.CreateManipulator();
+                            aktualniTvar = clickedOnObject;
+                            editovani = true;
+                        }
+
+                    }
+
+
                 }
             }
 
@@ -136,11 +163,11 @@ namespace NNPG2_04
                 }
                 else
                 {
-                    if(shape.ContainsPoint(clickPoint)) { return shape; }
+                    if (shape.ContainsPoint(clickPoint)) { return shape; }
                 }
             }
 
-            if (closestDistance < 20)
+            if (closestDistance < tolerance)
                 return closestShape;
 
             return null;
@@ -188,6 +215,18 @@ namespace NNPG2_04
                     endPoint = e.Location;
                     drawingRectangle = true;
                 }
+                else if (editovani)
+                {
+                    if (aktualniTvar.ManipulatorContains(e.Location))
+                    {
+                        transformovani = true;
+                    }
+                    else if (aktualniTvar.ContainsPoint(e.Location))
+                    {
+                        aktualniTvar.setOfset(e.Location);
+                        posun = true;
+                    }
+                }
                 this.InvalidateAll();
             }
 
@@ -200,6 +239,17 @@ namespace NNPG2_04
                 endPoint = e.Location;
                 InvalidateAll();
             }
+            else if (transformovani)
+            {
+                aktualniTvar.UpdateSize(e.Location);
+                InvalidateAll();
+            }
+            else if (posun)
+            {
+                aktualniTvar.UpdatePosition(e.Location);
+                InvalidateAll();
+            }
+
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -220,7 +270,7 @@ namespace NNPG2_04
                     Usecka usecka = new Usecka(pair);
                     usecka.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
                     usecka.nastavZIndex(listTvaru.Count);
-                    if(listTvaru.Count == 0)
+                    if (listTvaru.Count == 0)
                         listTvaru.AddFirst(usecka);
                     else
                         listTvaru.AddAfter(listTvaru.Last, usecka);
@@ -289,81 +339,23 @@ namespace NNPG2_04
                     else
                         listTvaru.AddAfter(listTvaru.Last, pravouhelnik);
                 }
-
-                drawingRectangle = false;
-                drawingLine = false;
-                drawingElipse = false;if (drawingLine)
+                else if (transformovani)
                 {
-                    endPoint = e.Location;
-                    drawingLine = false;
-
-                    Point[] pair =
-                        {
-                        new Point(startPoint.X, startPoint.Y),
-                        new Point(endPoint.X, endPoint.Y)
-                    };
-
-                    Usecka usecka = new Usecka(pair);
-                    usecka.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
-                    usecka.nastavZIndex(listTvaru.Count);
-                    listTvaru.AddLast(usecka);
+                    resetAktualniTvar();
+                    InvalidateAll();
                 }
-                else if (drawingElipse)
+                else if (posun)
                 {
-                    endPoint = e.Location;
-                    drawingElipse = false;
-
-                    int width = endPoint.X - startPoint.X;
-                    int height = endPoint.Y - startPoint.Y;
-
-                    Elipsa elipsa = new Elipsa(
-                        startPoint,
-                        endPoint,
-                        width,
-                        height
-                     );
-
-                    if (jednolitaBarve.Checked)
-                        elipsa.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, null, tloustkaOkraje);
-
-                    else if (srafovani.Checked)
-                        elipsa.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
-
-                    else
-                        elipsa.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
-
-                    elipsa.nastavZIndex(listTvaru.Count);
-                    listTvaru.AddLast(elipsa);
-                }
-                else if (drawingRectangle)
-                {
-                    endPoint = e.Location;
-                    drawingRectangle = false;
-
-                    int width = endPoint.X - startPoint.X;
-                    int height = endPoint.Y - startPoint.Y;
-
-
-                    Pravouhelnik pravouhelnik = new Pravouhelnik(
-                        new Rectangle(startPoint.X, startPoint.Y, width, height)
-                        );
-
-                    if (jednolitaBarve.Checked)
-                        pravouhelnik.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, null, tloustkaOkraje);
-
-                    else if (srafovani.Checked)
-                        pravouhelnik.pridejData(vybranaBarvaOkraj, vybranaBarvaPozadi, vybraneSrafovani, tloustkaOkraje);
-
-                    else
-                        pravouhelnik.pridejData(vybranaBarvaOkraj, null, null, tloustkaOkraje);
-
-                    pravouhelnik.nastavZIndex(listTvaru.Count);
-                    listTvaru.AddLast(pravouhelnik);
+                    resetAktualniTvar();
+                    InvalidateAll();
                 }
 
+                posun = false;
+                transformovani = false;
                 drawingRectangle = false;
                 drawingLine = false;
                 drawingElipse = false;
+
             }
 
         }
@@ -418,6 +410,14 @@ namespace NNPG2_04
                 usecka.nastavZIndex(listTvaru.Count);
                 usecka.Draw(g, jednolitaBarve.Checked, srafovani.Checked, PouzitOkraj.Checked);
             }
+
+            if (editovani || posun)
+            {
+                var okrapred = aktualniTvar.okraj;
+                aktualniTvar.okraj = Color.Red;
+                aktualniTvar.Draw(g, false, false, true);
+                aktualniTvar.okraj = okrapred;
+            }
         }
 
         private void zrusButtns()
@@ -426,11 +426,14 @@ namespace NNPG2_04
             this.kresliOval = false;
             this.kresliPravouhelnik = false;
             this.mazani = false;
+            this.editace = false;
+            resetAktualniTvar();
 
             kresliPravouhelnikButton.Checked = false;
             KreslitUseckuButton.Checked = false;
             krasliElipsuButton.Checked = false;
             smazatButton.Checked = false;
+            transformaceButoon.Checked = false;
         }
 
         private void KreslitUsecku_Click(object sender, EventArgs e)
@@ -469,13 +472,26 @@ namespace NNPG2_04
 
         private void transformaceButoon_Click(object sender, EventArgs e)
         {
-
+            bool value = this.editace;
+            if (value)
+            {
+                if (aktualniTvar != null)
+                    resetAktualniTvar();
+            }
+            zrusButtns();
+            if (value == false)
+            {
+                editace = true;
+                transformaceButoon.Checked = true;
+            }
+            InvalidateAll();
         }
 
         private void smazatButton_Click(object sender, EventArgs e)
         {
+            bool value = this.mazani;
             zrusButtns();
-            if (mazani == false)
+            if (value == false)
             {
                 mazani = true;
                 smazatButton.Checked = true;
@@ -596,31 +612,14 @@ namespace NNPG2_04
             okrajStyl.SelectedIndex = 0;
         }
 
-
-        private void ShowDialog()
+        private void resetAktualniTvar()
         {
-            // Vytvoření dialogového okna
-            Form dialog = new Form();
-            dialog.Text = "Volba akce";
-            dialog.Size = new System.Drawing.Size(200, 100);
-            dialog.StartPosition = FormStartPosition.CenterParent;
-
-            // Tlačítko pro volání první funkce
-            Button button1 = new Button();
-            button1.Text = "Funkce 1";
-            button1.Location = new System.Drawing.Point(20, 20);
-            button1.Click += (sender, e) => { /* Zde volat první funkci */ };
-            dialog.Controls.Add(button1);
-
-            // Tlačítko pro volání druhé funkce
-            Button button2 = new Button();
-            button2.Text = "Funkce 2";
-            button2.Location = new System.Drawing.Point(100, 20);
-            button2.Click += (sender, e) => { /* Zde volat druhou funkci */ };
-            dialog.Controls.Add(button2);
-
-            // Zobrazení dialogového okna
-            dialog.ShowDialog();
+            if (aktualniTvar != null)
+                aktualniTvar.CreateManipulator();
+            this.aktualniTvar = null;
+            this.editovani = false;
+            this.transformovani = false;
+            this.posun = false;
         }
 
     }

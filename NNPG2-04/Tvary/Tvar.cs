@@ -22,9 +22,13 @@ namespace NNPG2_04.Tvary
         public abstract void nastavZIndex(int index);
 
         public abstract void Draw(Graphics g, bool vypln, bool srafovani, bool okraj);
-        public abstract void UpdatePosition(int x, int y);
+        public abstract void UpdatePosition(Point point);
+        public abstract void UpdateSize(Point point);
         public abstract bool ContainsPoint(Point point);
-             public abstract double vzdalenostOdBodu(Point point);
+        public abstract double vzdalenostOdBodu(Point point);
+        public abstract bool ManipulatorContains(Point point);
+        public abstract void CreateManipulator();
+        public abstract void setOfset(Point point);
 
         public abstract LinkedList<Tvar> doPopredi(LinkedList<Tvar> list);
         public abstract LinkedList<Tvar> doPozadi(LinkedList<Tvar> list);
